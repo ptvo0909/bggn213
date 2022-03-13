@@ -1,0 +1,30 @@
+---
+title: "Week 7 - Sequencing"
+author: "Pham Vo"
+date: "2/21/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1. Proportion of G/G in a population
+
+```{r}
+mxl_data <- "373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv"
+mxl <- read.csv(mxl_data)
+head(mxl)
+```
+```{r}
+table(mxl$Genotype..forward.strand.)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.)/nrow(mxl) * 100
+nrow(mxl)
+```
+
+

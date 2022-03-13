@@ -1,0 +1,150 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Week 5: R functions}
+\author{Pham Vo}
+\date{2/7/2022}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Week 5: R functions},
+  pdfauthor={Pham Vo},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{example-input-vectors-to-start-with}{%
+\section{Example input vectors to start
+with}\label{example-input-vectors-to-start-with}}
+
+student1 \textless- c(100, 100, 100, 100, 100, 100, 100, 90) student2
+\textless- c(100, NA, 90, 90, 90, 90, 97, 80) student3 \textless- c(90,
+NA, NA, NA, NA, NA, NA, NA)
+
+\#Q1. Write a grade() function to determine an overall grade from a
+vector
+
+\hypertarget{to-find-the-position-of-the-smallest-value-i.e.-min-value-in-our-vector}{%
+\section{To find the position of the smallest value (i.e.~min) value in
+our
+vector}\label{to-find-the-position-of-the-smallest-value-i.e.-min-value-in-our-vector}}
+
+student1{[}which.min(student1){]}
+
+mean(student1{[}-which.min(student1){]})
+
+\#So lets map/change the NA values to zero. Use the ``is.na()'' function
+
+is.na(student2)
+
+x \textless- student2 x
+
+x{[}is.na(x){]}b \textless- 0 x mean(x)
+
+\#Combine our working snippets to find the average for figure 3
+
+grade \textless- function(x) \{ x{[}is.na(x){]} \textless- 0
+mean(x{[}-which.min(x){]}) \}
+
+grade(student3)
+
+\#Your final function should be adquately explained with code comments
+and be able to work on an example class gradebook such as this one in
+CSV format:
+
+url \textless- ``\url{https://tinyurl.com/gradeinput}'' gradebook
+\textless- read.csv(url, row.names=1) gradebook
+
+apply(gradebook, 1, grade)
+
+\#Q2. Who is the top scoring student overall in the grade book?
+
+result \textless- apply(gradebook, 1, grade) sort(result, decreasing =
+TRUE)
+
+which.max(result)
+
+\#Q3. Which homework was toughest on students?
+
+hw.ave \textless- apply(gradebook, 2, mean, na.rm=TRUE)
+which.min(hw.ave)
+
+hw.med \textless- apply(gradebook, 2, median, na.rm=TRUE)
+which.min(hw.med)
+
+\#There is a different rest when using mean and median. Good idea to
+plot the data and see.
+
+boxplot(gradebook)
+
+\#Q4. From your analysis of the gradebook, which homework was most
+predictive of overall score (i.e.~highest correlation with average grade
+score)?
+
+result gradebook{[}is.na(gradebook){]} \textless- 0 cor(result,
+gradebook\$hw5, )
+
+apply(gradebook, 2, cor, x=result)
+
+\#Q5. Make sure you save your Rmarkdown document and can click the
+``Knit'' button to generate a PDF foramt report without errors. Finally,
+submit your PDF to gradescope. {[}1pt{]}
+
+\end{document}

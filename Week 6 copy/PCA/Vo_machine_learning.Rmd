@@ -1,0 +1,158 @@
+---
+title: "Machine Learning"
+author: "Pham Vo"
+date: "2/13/2022"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+# Clustering with kmeans and hclust()
+
+We will begin by making up some data to cluster.
+shortcut to insert code chunk: option+command+i
+
+```{r}
+tmp <- c(rnorm(30,3), rnorm(30,-3))
+x <- cbind(x=tmp,y=rev(tmp))
+x
+```
+
+## Run kmeans()
+```{r}
+k <- kmeans(x, centers=2, nstart=20)
+k
+```
+> Q. what size is each cluster?
+
+```{r}
+k$size
+```
+
+> Q. Cluster centers
+
+```{r}
+k$centers
+```
+
+> Q. Membership vector
+
+```{r}
+k$cluster
+```
+
+> Plot our data with the clustering result 
+
+```{r}
+plot(x, col=k$cluster)
+points(k$centers, col="blue", pch=16, cex=1.5)
+points(x[42,1], x[42,2], col="darkgreen", pch = 16)
+points(x[19,1], x[19,2], col="brown", pch = 16)
+```
+
+## hclust()
+
+```{r}
+hc <- hclust(dist(x))
+hc
+```
+There is a cool and useful plot method for hclust()
+
+```{r}
+plot(hc)
+```
+
+# Principal Component Analysis
+Data import
+
+```{r}
+url <- "https://tinyurl.com/UK-foods"
+x <- read.csv(url, row.names=1)
+x
+```
+#Q1. How many rows and columns are in your new data frame named x? What R functions could you use to answer this questions?
+
+```{r}
+dim(x)
+ncol(x)
+nrow(x)
+```
+
+
+Let's make some typical plots
+
+```{r}
+mycols <- rainbow(nrow(x))
+barplot(as.matrix(x), col=mycols)
+```
+
+Make it side by side i.e. not stacked
+
+```{r}
+barplot(as.matrix(x), col=mycols, beside=TRUE)
+```
+
+One plot that is helpful here.
+
+#Q5: Generating all pairwise plots may help somewhat. Can you make sense of the following code and resulting figure? What does it mean if a given point lies on the diagonal for a given plot?
+
+No difference in values between x-axis and y-axis.
+
+```{r}
+pairs(x, col=mycols)
+```
+
+#Q6. What is the main differences between N. Ireland and the other countries of the UK in terms of this data-set?
+
+
+# PCA to rescue 
+
+Do PCR of this 17D food data. The main function in base R is called "prcom()". This function requires the transpose of our data in this case...
+
+```{r}
+pca <- prcomp(t(x))
+summary(pca)
+```
+
+The prcom() function returns a list object. 
+
+```{r}
+plot(pca)
+```
+
+The PCA plot a.k.a a PCA score plot is a plot of PC1 vs PV2. Basically using the new PCA axis to view our data.
+
+```{r}
+attributes(pca)
+```
+
+We will focus on "pca$x" for this plot 
+
+```{r}
+pca$x
+```
+
+```{r}
+plot(pca$x[,1], pca$x[,2], xlab= "PC1", ylab="PC2")
+text(pca$x[,1], pca$x[,2], labels = colnames(x))
+```
+## PCA of a RNA-Seq
+
+```{r}
+url2 <- "https://tinyurl.com/expression-CSV"
+rna.data <- read.csv(url2, row.names=1)
+head(rna.data)
+```
+
+```{r}
+pca <- prcomp(t(rna.data))
+summary(pca)
+```
+Make our PCA score plot
+```{r}
+plot(pca$x[,1:2])
+text(pca$x[,1:2], labels = colnames(rna.data))
+```
+
+

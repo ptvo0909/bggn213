@@ -1,0 +1,55 @@
+#' ---
+#' title: "Week 5 data visualizatin"
+#' author: "Pham Vo (UID: A59010610)"
+#' date: "Feb 7th, 2022"
+#' ---
+
+View(cars)
+
+install.packages("ggplot2")
+library(ggplot2)
+p <- ggplot(cars) +
+  aes(x=speed, y=dist) +
+  geom_point()
+
+p
+
+p + geom_smooth()
+p + geom_smooth(method="lm")
+
+
+url <- "https://bioboot.github.io/bimm143_S20/class-material/up_down_expression.txt"
+genes <- read.delim(url)
+
+#Look at first 6 linrd
+head(genes)
+
+View(genes)
+#Q. how many genes are there in the list?
+nrow(genes)
+#Q. how many genes are upregulated?
+table(genes$State)
+
+#Q. What fraction of genes are up, down etc.
+round((table(genes$State)/nrow(genes))*100, 2)
+
+#Q. Generate a publication figure
+
+g <- ggplot(genes) +
+      aes(x=Condition1, y=Condition2, col=State) +
+      geom_point()
+
+g
+
+#Add more custom layers
+
+g + theme_bw() +
+  scale_color_manual(values=c("blue", "gray", "red")) +
+  labs(x="Control(no drug)", y="Drug treated", title="Gene expression changes example plot")
+
+
+
+
+
+
+
